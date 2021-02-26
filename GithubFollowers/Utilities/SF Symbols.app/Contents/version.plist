@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildAliasOf</key>
+	<string>CoreGlyphsApp</string>
+	<key>BuildVersion</key>
+	<string>9</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.1</string>
+	<key>CFBundleVersion</key>
+	<string>44</string>
+	<key>ProductBuildVersion</key>
+	<string>1A170</string>
+	<key>ProjectName</key>
+	<string>CoreGlyphsApp</string>
+	<key>SourceVersion</key>
+	<string>44000000000000</string>
+</dict>
+</plist>
