@@ -37,8 +37,8 @@ class FollowersListViewController: UIViewController {
     
     private var page = 1
     private var hasMoreFollowers = true
-    private var followers: [Followers] = []
-    private var filterFollowes: [Followers] = []
+//    private var followers: [Followers] = []
+  //  private var filterFollowes: [Followers] = []
     private var isSearching = false
     
     enum Section {
@@ -61,7 +61,6 @@ class FollowersListViewController: UIViewController {
     func configureSearchController() {
         let searchController = UISearchController()
         searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Search usernames"
         navigationItem.searchController = searchController
     }
@@ -131,7 +130,7 @@ private extension FollowersListViewController {
 
         showLoadingView()
         configureCollectionViewDataSource()
-        updateCollectionView(on: self.followers)
+        updateCollectionView(on: self.viewModel.followers)
         configureSearchController()
         title = usernameLabel.text
 
@@ -139,7 +138,7 @@ private extension FollowersListViewController {
             guard let self = self else { return }
             self.dismissedLoadingView()
 
-            self.followers.append(contentsOf: followers)
+ //           self.viewModel.followers.append(contentsOf: followers)
             if followers.isEmpty {
                 let message = "This user has no more followers"
                 DispatchQueue.main.async {
@@ -147,7 +146,7 @@ private extension FollowersListViewController {
                     return
                 }
             }
-            self.updateCollectionView(on: self.followers)
+            self.updateCollectionView(on: self.viewModel.followers)
         }
     }
 }
@@ -155,7 +154,7 @@ private extension FollowersListViewController {
 extension FollowersListViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let activeArray = isSearching ? filterFollowes : followers
+        let activeArray = isSearching ? viewModel.filterFollowes : viewModel.followers
         let follower = activeArray[indexPath.item]
 
         let userProfileViewController = UserProfileViewController()
@@ -188,24 +187,25 @@ extension FollowersListViewController: UICollectionViewDelegate {
                         return
                     }
                 }
-                self.followers.append(contentsOf: followers)
+                self.viewModel.followers.append(contentsOf: followers)
                 self.updateCollectionView(on: followers)
             }
         }
     }
 }
 
-extension FollowersListViewController: UISearchResultsUpdating, UISearchBarDelegate {
+extension FollowersListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        guard let filter = searchController.searchBar.text, !filter.isEmpty else { return }
-        isSearching = true
-        filterFollowes = followers.filter { $0.login.lowercased().contains(filter.lowercased()) }
-        updateCollectionView(on: filterFollowes)
-    }
+        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
+            updateCollectionView(on: viewModel.followers)
+            isSearching = false
+            viewModel.filterFollowes.removeAll()
+            return
+        }
 
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        updateCollectionView(on: followers)
-        isSearching = false
+        isSearching = true
+        viewModel.filterFollowes = viewModel.followers.filter { $0.login.lowercased().contains(filter.lowercased()) }
+        updateCollectionView(on: viewModel.filterFollowes)
     }
 }
 
@@ -217,15 +217,14 @@ extension FollowersListViewController: FollowersListViewControllerDelegate {
         title = username
         page = 1
 
-        followers.removeAll()
-        filterFollowes.removeAll()
-        followersCollectionView.setContentOffset(.zero, animated: true)
-
+        viewModel.followers.removeAll()
+        viewModel.filterFollowes.removeAll()
+        followersCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
         viewModel.fetchFollowers(username: usernameLabel.text!, page: page) { [weak self] followers in
             guard let self = self else { return }
             self.dismissedLoadingView()
 
-            self.followers.append(contentsOf: followers)
+            self.viewModel.followers.append(contentsOf: followers)
             if followers.isEmpty {
                 let message = "This user has no more followers"
                 DispatchQueue.main.async {
@@ -233,7 +232,7 @@ extension FollowersListViewController: FollowersListViewControllerDelegate {
                     return
                 }
             }
-            self.updateCollectionView(on: self.followers)
+            self.updateCollectionView(on: self.viewModel.followers)
         }
     }
 }

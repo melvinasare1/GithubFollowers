@@ -13,10 +13,6 @@ class NetworkManager {
     let baseUrl = "https://api.github.com/users/"
     let cache = NSCache<NSString, UIImage>()
 
-    private init() {
-
-    }
-
     func getUserInfo(for username: String, completed: @escaping (Result<User, GhError>) -> Void) {
         let endpoint = baseUrl + "\(username)"
 
@@ -76,11 +72,10 @@ class NetworkManager {
 
             do {
                 let decoder = JSONDecoder()
-      //          decoder.keyDecodingStrategy = .convertFromSnakeCase
                 let followers = try decoder.decode([Followers].self, from: data)
                 completion(followers, nil)
             } catch {
-                completion(nil, "This response was invalid. Please try again.")
+                
             }
         }
         task.resume()
