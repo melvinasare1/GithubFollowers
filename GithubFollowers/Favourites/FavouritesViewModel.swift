@@ -12,10 +12,6 @@ class FavouritesViewModel {
     public var favourites: [Followers] = []
 
     func removeFavurites(favourite: Followers, actionType: PersistenceActionType) {
-        PersistenceManager.updateWith(favourite: favourite, actionType: actionType) { [weak self] error in
-            guard let self = self else { return }
-            guard let error = error else { return }
-        }
+        PersistenceManager.updateWith(favourite: favourite, actionType: actionType) { _ in }
     }
-
 }
