@@ -34,21 +34,14 @@ class FollowersListViewController: UIViewController {
         collectionView.delegate = self
         return collectionView
     }()
-    
-    private var page = 1
-    private var hasMoreFollowers = true
-//    private var followers: [Followers] = []
-  //  private var filterFollowes: [Followers] = []
-    private var isSearching = false
-    
+
     enum Section {
         case main
     }
     
     private let viewModel: FollowersListViewModel
     private var dataSource: UICollectionViewDiffableDataSource<Section, Followers>!
-    
-    
+
     func configureCollectionViewDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, Followers>(collectionView: followersCollectionView, cellProvider: { (collectionView, indexPath, followers) -> UICollectionViewCell? in
             
@@ -77,23 +70,31 @@ class FollowersListViewController: UIViewController {
 
         NetworkManager.shared.getUserInfo(for: usernameLabel.text!) { [weak self] result in
             self?.dismissedLoadingView()
+
             switch result {
             case .success(let user):
-                let favourite = Followers(login: user.login, avatar_url: user.avatarUrl)
+                self?.addUserToFavourites(user: user)
 
-                PersistenceManager.updateWith(favourite: favourite, actionType: .add) { [weak self] error in
-                    guard let error = error else {
-                        self?.presentAlert(title: "Success", message: "It worked")
-                        return
-                    }
-                    self?.presentAlert(title: error.localizedDescription, message: "It didn't work")
-                }
-            case .failure(let error): 
-                self?.presentAlert(title: error.localizedDescription, message: "there is an error")
+            case .failure(let error):
+                self?.presentAlert(title: error.localizedDescription, message: "error")
             }
         }
     }
-    
+
+    func addUserToFavourites(user: User) {
+        let favourite = Followers(login: user.login, avatar_url: user.avatarUrl)
+
+        PersistenceManager.updateWith(favourite: favourite, actionType: .add) { [weak self] error in
+            guard let self = self else { return }
+
+            guard let error = error else {
+                self.presentAlert(title: "yes it worked", message: "yes")
+                return
+            }
+            self.presentAlert(title: "Error", message: "error")
+        }
+    }
+
     init(viewModel: FollowersListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -134,11 +135,10 @@ private extension FollowersListViewController {
         configureSearchController()
         title = usernameLabel.text
 
-        viewModel.fetchFollowers(username: usernameLabel.text!, page: page) { [weak self] followers in
+        viewModel.fetchFollowers(username: usernameLabel.text!, page: viewModel.page) { [weak self] followers in
             guard let self = self else { return }
             self.dismissedLoadingView()
 
- //           self.viewModel.followers.append(contentsOf: followers)
             if followers.isEmpty {
                 let message = "This user has no more followers"
                 DispatchQueue.main.async {
@@ -154,7 +154,7 @@ private extension FollowersListViewController {
 extension FollowersListViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let activeArray = isSearching ? viewModel.filterFollowes : viewModel.followers
+        let activeArray = viewModel.isSearching ? viewModel.filterFollowes : viewModel.followers
         let follower = activeArray[indexPath.item]
 
         let userProfileViewController = UserProfileViewController()
@@ -171,14 +171,15 @@ extension FollowersListViewController: UICollectionViewDelegate {
         let height = scrollView.frame.size.height
         
         if offsetY > contentHeight - height {
-            guard hasMoreFollowers else { return }
-            page += 1
+            guard viewModel.hasMoreFollowers else { return }
+            viewModel.page += 1
             
-            viewModel.fetchFollowers(username: usernameLabel.text!, page: page) { [weak self] followers in
+            viewModel.fetchFollowers(username: usernameLabel.text!, page: viewModel.page) { [weak self] followers in
                 guard let self = self else { return }
-          //      guard !followers.isEmpty else { return }
+
+                guard !followers.isEmpty else { return }
                 if followers.count < 100 {
-                    self.hasMoreFollowers = false
+                    self.viewModel.hasMoreFollowers = false
                 }
                 if followers.isEmpty {
                     let message = "This user has no more followers"
@@ -198,12 +199,12 @@ extension FollowersListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let filter = searchController.searchBar.text, !filter.isEmpty else {
             updateCollectionView(on: viewModel.followers)
-            isSearching = false
+            viewModel.isSearching = false
             viewModel.filterFollowes.removeAll()
             return
         }
 
-        isSearching = true
+        viewModel.isSearching = true
         viewModel.filterFollowes = viewModel.followers.filter { $0.login.lowercased().contains(filter.lowercased()) }
         updateCollectionView(on: viewModel.filterFollowes)
     }
@@ -215,16 +216,15 @@ extension FollowersListViewController: FollowersListViewControllerDelegate {
         self.showLoadingView()
         self.usernameLabel.text = username
         title = username
-        page = 1
+            viewModel.page = 1
 
         viewModel.followers.removeAll()
         viewModel.filterFollowes.removeAll()
         followersCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
-        viewModel.fetchFollowers(username: usernameLabel.text!, page: page) { [weak self] followers in
+        viewModel.fetchFollowers(username: usernameLabel.text!, page: viewModel.page) { [weak self] followers in
             guard let self = self else { return }
             self.dismissedLoadingView()
 
-            self.viewModel.followers.append(contentsOf: followers)
             if followers.isEmpty {
                 let message = "This user has no more followers"
                 DispatchQueue.main.async {

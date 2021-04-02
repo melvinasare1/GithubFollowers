@@ -23,7 +23,7 @@ class GhTabBarController: UITabBarController {
     }
 
     func createFavouriteViewController() -> UINavigationController {
-        let favouritesViewController = FavouritesViewController()
+        let favouritesViewController = FavouritesViewController(viewModel: FavouritesViewModel())
         favouritesViewController.title = "Favourites"
         favouritesViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
         return UINavigationController(rootViewController: favouritesViewController)

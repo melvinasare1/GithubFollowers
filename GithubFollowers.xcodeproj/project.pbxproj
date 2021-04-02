@@ -39,23 +39,9 @@
 		123C154225E90E5000C653C9 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123C153825E90E5000C653C9 /* StringExtension.swift */; };
 		123C154325E90E5000C653C9 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123C153925E90E5000C653C9 /* DateExtension.swift */; };
 		123C154425E90E5000C653C9 /* Followers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123C153A25E90E5000C653C9 /* Followers.swift */; };
+		1254427926171E0D00FFD108 /* FavouritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1254427826171E0D00FFD108 /* FavouritesViewModel.swift */; };
 		12D7DEED25F19D4400366B3D /* SF Symbols.app in Resources */ = {isa = PBXBuildFile; fileRef = 12D7DEEC25F19D4400366B3D /* SF Symbols.app */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildRule section */
-
-
-			
-	
-
-
-			
-	
-
-
-			
-	
-/* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
 		123C14DC25E90D2900C653C9 /* GithubFollowers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubFollowers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,6 +78,7 @@
 		123C153825E90E5000C653C9 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		123C153925E90E5000C653C9 /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		123C153A25E90E5000C653C9 /* Followers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Followers.swift; sourceTree = "<group>"; };
+		1254427826171E0D00FFD108 /* FavouritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewModel.swift; sourceTree = "<group>"; };
 		12D7DEEC25F19D4400366B3D /* SF Symbols.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = "SF Symbols.app"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -155,6 +142,7 @@
 			children = (
 				123C14FD25E90E1100C653C9 /* FavouritesCell.swift */,
 				123C14FE25E90E1100C653C9 /* FavouritesViewController.swift */,
+				1254427826171E0D00FFD108 /* FavouritesViewModel.swift */,
 			);
 			path = Favourites;
 			sourceTree = "<group>";
@@ -226,6 +214,9 @@
 			isa = PBXGroup;
 			children = (
 				123C153025E90E5000C653C9 /* GhError.swift */,
+				123C153725E90E5000C653C9 /* Extensions.swift */,
+				123C153825E90E5000C653C9 /* StringExtension.swift */,
+				123C153925E90E5000C653C9 /* DateExtension.swift */,
 				12D7DEEC25F19D4400366B3D /* SF Symbols.app */,
 			);
 			path = Utilities;
@@ -244,9 +235,6 @@
 			isa = PBXGroup;
 			children = (
 				123C153625E90E5000C653C9 /* User.swift */,
-				123C153725E90E5000C653C9 /* Extensions.swift */,
-				123C153825E90E5000C653C9 /* StringExtension.swift */,
-				123C153925E90E5000C653C9 /* DateExtension.swift */,
 				123C153A25E90E5000C653C9 /* Followers.swift */,
 			);
 			path = Models;
@@ -259,7 +247,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 123C14F025E90D2A00C653C9 /* Build configuration list for PBXNativeTarget "GithubFollowers" */;
 			buildPhases = (
-				F3C7B4C899D5E9A93FAAC43A /* Compile Binary Libraries */,
 				123C14D825E90D2900C653C9 /* Sources */,
 				123C14D925E90D2900C653C9 /* Frameworks */,
 				123C14DA25E90D2900C653C9 /* Resources */,
@@ -328,6 +315,7 @@
 				123C153C25E90E5000C653C9 /* GhError.swift in Sources */,
 				123C150925E90E1E00C653C9 /* FollowersCollectionViewCell.swift in Sources */,
 				123C154425E90E5000C653C9 /* Followers.swift in Sources */,
+				1254427926171E0D00FFD108 /* FavouritesViewModel.swift in Sources */,
 				123C14E025E90D2900C653C9 /* AppDelegate.swift in Sources */,
 				123C154025E90E5000C653C9 /* User.swift in Sources */,
 				123C153F25E90E5000C653C9 /* PersistenceManager.swift in Sources */,
@@ -546,60 +534,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-	
-		/* Begin PBXShellScriptBuildPhase section */
-
-	F3C7B4C899D5E9A93FAAC43A /* Compile Binary Libraries */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Compile Binary Libraries";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.
-
-\"${PROJECT_FILE_PATH}/xcuserdata/.xcassets/Assets.xcassets\" false";			
-		};
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-		
-	
-		/* End PBXShellScriptBuildPhase section */
-	
-	
 	};
 	rootObject = 123C14D425E90D2900C653C9 /* Project object */;
 }
