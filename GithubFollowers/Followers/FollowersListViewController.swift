@@ -85,13 +85,14 @@ class FollowersListViewController: UIViewController {
         let favourite = Followers(login: user.login, avatar_url: user.avatarUrl)
 
         PersistenceManager.updateWith(favourite: favourite, actionType: .add) { [weak self] error in
-            guard let self = self else { return }
+            guard let self = self else { return nil }
 
             guard let error = error else {
-                self.presentAlert(title: "yes it worked", message: "yes")
-                return
+                self.presentAlert(title: "Success", message: "Added to favourites")
+                return nil
             }
-            self.presentAlert(title: "Error", message: "error")
+            self.presentAlert(title: "Error", message: "Already added to favourites")
+            return nil
         }
     }
 

@@ -28,8 +28,12 @@ class GhBodyLabel: UILabel {
         textColor = .secondaryLabel
         font = UIFont.preferredFont(forTextStyle: .body)
         adjustsFontSizeToFitWidth = true
+        font =  UIFont.systemFont(ofSize: 16, weight: .regular)
         minimumScaleFactor = 0.75
-        lineBreakMode = .byWordWrapping
         translatesAutoresizingMaskIntoConstraints = false
+        self.textAlignment = textAlignment
+        adjustsFontSizeToFitWidth = true
+        lineBreakMode = .byTruncatingTail
+        numberOfLines = 0
     }
 }

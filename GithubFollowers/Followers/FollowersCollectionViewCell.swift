@@ -15,8 +15,8 @@ class FollowersCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
 
-    private let usernameLabel: UILabel = {
-        let label = UILabel()
+    private let usernameLabel: GhBodyLabel = {
+        let label = GhBodyLabel()
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
